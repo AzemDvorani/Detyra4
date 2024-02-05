@@ -1,5 +1,3 @@
-# CloudWatch Alarm for CPU utilization
-
 resource "aws_cloudwatch_metric_alarm" "rds_cpu_alarm" {
   alarm_name          = "rds-cpu-utilization"
   comparison_operator = "GreaterThanOrEqualToThreshold"

@@ -1,7 +1,6 @@
 resource "aws_launch_configuration" "example" {
   name = "azemi-launch-configuration"
 
-  # Replace with your preferred AMI and instance type
   image_id        = "ami-030574447f2572780"
   instance_type   = "t2.micro"
   key_name        = "developlmskp"
@@ -18,13 +17,9 @@ resource "aws_launch_configuration" "example" {
 
 resource "aws_autoscaling_group" "example" {
   desired_capacity     = 1  // for minimal spent resources
-  max_size             = 2
+  max_size             = 5
   min_size             = 1
-  vpc_zone_identifier = [module.vpc.private_subnet,module.vpc.public_subnet]
+  vpc_zone_identifier = [var.private_subnet,var.public_subnet_id]
 
   launch_configuration = aws_launch_configuration.example.id
-}
-
-module "vpc" {
-  source = "../vpc"
 }

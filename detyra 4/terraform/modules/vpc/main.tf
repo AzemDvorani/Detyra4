@@ -4,7 +4,7 @@ resource "aws_vpc" "my_vpc" {
   enable_dns_support = true
   enable_dns_hostnames = true
 }
-resource "aws_subnet" "public_subnet" {
+resource "aws_subnet" "public_subnet_id" {
   vpc_id                  = aws_vpc.my_vpc.id
   cidr_block              = "10.0.1.0/24"  
   availability_zone       = "eu-central-1a"   
@@ -30,7 +30,7 @@ resource "aws_security_group" "xemi_security_group" {
   ingress {
     from_port   = 3306
     to_port     = 3306
-    protocol    = "tcp"
+    protocol   = "tcp"
     cidr_blocks = ["0.0.0.0/0"]  # Adjust as per your network requirements
   }
 
@@ -42,20 +42,3 @@ resource "aws_security_group" "xemi_security_group" {
   }
 }
 
-output "vpc_id" {
-  value = aws_vpc.my_vpc.id
-}
-output "public_subnet" {
-  value = aws_subnet.public_subnet.id
-}
-output "private_subnet" {
-  value = aws_subnet.private_subnet.id
-}
-
-output "subnet_id" {
-  value = aws_subnet.private_subnet.id
-}
-output "security_group" {
-  value = aws_security_group.xemi_security_group.id
-   
-}
