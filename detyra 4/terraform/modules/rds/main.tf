@@ -3,14 +3,8 @@ module "vpc" {
 }
 resource "aws_db_subnet_group" "default" {
   name       = "rds-subnet-group"
-  subnet_ids = [module.vpc.subnet_id, module.vpc.public_subnet]
+  subnet_ids = [module.vpc.subnet_id, module.vpc.public_subnet_id]
 }
-output "rds_endpoint" {
-  value = aws_db_instance.rds.endpoint
-}
-
-
-
 resource "aws_rds_cluster" "rds-cluster" {
   cluster_identifier      = "rds-cluster"
   engine                  = "aurora-mysql"   # Change to MySQL
@@ -23,7 +17,7 @@ resource "aws_rds_cluster" "rds-cluster" {
 
   skip_final_snapshot       = true  # Set to true if you want to skip the final snapshot
   db_subnet_group_name    = aws_db_subnet_group.default.name
-  vpc_security_group_ids  = [module.vpc.security_group]  # Replace with your security group IDs
+  vpc_security_group_ids  = [module.vpc.security_group_ids]  # Replace with your security group IDs
 
   scaling_configuration {
     auto_pause               = true
@@ -61,6 +55,6 @@ resource "aws_db_instance" "rds" {
   multi_az             = true  # Enable multi-AZ deployment for clustering
   backup_retention_period = 7  # Set the number of days to retain backups
   engine_version      = aws_rds_cluster.rds-cluster.engine_version
-  vpc_security_group_ids = [module.vpc.security_group]  # Replace with your security group IDs
+  vpc_security_group_ids = [var.security_group]  # Replace with your security group IDs
   depends_on = [aws_rds_cluster.rds-cluster]
 }
